@@ -1,3 +1,8 @@
+@if  (@session('status'))
+<div class="bg-green-600  text-green-100 text-lg font-bold p-2">
+    {{session('status')}}</div>
+@endif
+
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -15,7 +20,7 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts')">
                         {{ __('Post') }}
                     </x-nav-link>
                 </div>

@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Post;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,9 +29,13 @@ Route::middleware('auth')->group(function () {
   Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 }); 
+//Router personalizada para llamar la funcion de index y mostrar los posteos
+Route::get('/post',[App\Http\controllers\PostController::class, 'index'])->name('post.index');
+Route::post('/post',[App\Http\controllers\PostController::class,'store'])->name('post.store');
 
-Route::get('/post', function(){
-return view ('post');
-})->name('post.index');
+Route::get('/post', function(){ 
+  return view ('post');
+})->name('posts.index');
+
 
 require __DIR__.'/auth.php';
