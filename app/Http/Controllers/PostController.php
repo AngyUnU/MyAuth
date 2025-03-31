@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
-use App\Http\controllers\PostController;
 
 class PostController extends Controller
 {
@@ -32,15 +31,22 @@ class PostController extends Controller
     //return 'posting Now ...';
     //return request('message');
     //$message = request('message');
-    $request->validate([
-        'messge' => ['required','string'],
+   
+    // Post::create([
+    //   //'message' => $message,
+    //   'message' => $request->get('message'),
+    //   'user_id' => auth()->id(),
+    // ]);
+    $dataValidates=$request->validate([
+        'message' => ['required', 'min:8', 'max:255'],
     ]);
-    Post::create([
-      //'message' => $message,
-      'message' => $request->get('message'),
-      'user_id' => auth()->id(),
+    //primero accedioento al user desde el request, luego a post desde iser y finalmente 
+    //a create desde post, ahora solo pasar los datos
+    @dump($dataValidates);
+    $request->user()->post()->create([
+        'message' => $request->get('message'),
     ]);
-    return to_route('posts.index')->with ('status',_('post created succesfully!'));
+        return to_route('posts.index')->with ('status',__('post create succesfully!'));
     }
 
     /**
@@ -56,7 +62,11 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+     // return view('posts/edit',['post' => $post]);
+     $this->authorize('update',$post);
+     return view('posts/edit',[
+        'post' => $post,
+     ]);
     }
 
     /**
@@ -64,7 +74,13 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $this -> authorize('update', $post);
+
+        $dataValidates = $request->validate([
+            'message' =>['required', 'min:8','max:255'],
+        ]);
+        $post->update($dataValidates);
+        return to_route('posts.index')->with('status', __('post update succefully!'));
     }
 
     /**
@@ -72,6 +88,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+     $post->delete();
+     return to_route('post.index')-> with ('status')
     }
 }

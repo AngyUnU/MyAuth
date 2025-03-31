@@ -32,10 +32,11 @@ Route::middleware('auth')->group(function () {
 //Router personalizada para llamar la funcion de index y mostrar los posteos
 Route::get('/post',[App\Http\controllers\PostController::class, 'index'])->name('post.index');
 Route::post('/post',[App\Http\controllers\PostController::class,'store'])->name('post.store');
+Route::post('/post',[App\Http\controllers\PostController::class,'edit'])->name('post.edit');
+Route::post('/post',[App\Http\controllers\PostController::class,'update'])->name('post.update');
+Route::post('/post',[App\Http\controllers\PostController::class,'destroy'])->name('post.destroy');
 
-Route::get('/post', function(){ 
-  return view ('post');
-})->name('posts.index');
 
 
 require __DIR__.'/auth.php';
+ 
